@@ -1,6 +1,7 @@
 # Adopt a Pet
 
-** This repo contains the solution to the following Node+Express exercise **
+- ##### This is an exercise I created for the [WBS Coding School](https://www.wbscodingschool.com/) to make web dev students practice their **Node + Express** skills.
+- ##### This repo contains the solution to the following exercise
 
 ![silly cat](https://github.com/MyElectricSheep/node-express-adopt-a-pet/blob/main/cat.jpg?raw=true)
 
