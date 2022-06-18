@@ -44,6 +44,16 @@ const pets = {
       url: "https://robohash.org/numquamvelalias.png?size=100x100&set=set1",
     },
   ],
+  sheeps: [
+    {
+      name: "Roid the Droid",
+      age: 2,
+      breed: "Scottish Blackface",
+      description:
+        "Roid was the electric sheep of Rick Deckard; who dumped it when he got a real nubian goat.",
+      url: "https://robohash.org/kdlkwjhdlhjwldhwl.png?size=100x100&set=set1",
+    },
+  ],
 };
 
 module.exports = pets;

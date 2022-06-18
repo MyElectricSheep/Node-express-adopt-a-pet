@@ -1,5 +1,6 @@
 const express = require("express");
 const app = express();
+app.use(express.urlencoded({ extended: true }));
 
 const port = process.env.PORT || 3000;
 
@@ -19,17 +20,77 @@ app.get("/", (req, res) => {
   <ul>
    ${listOfPets}
   </ul>
+  <br/>
+  <a href="/animals/new">I want to donate a pet!</a>
   `);
+});
+
+app.get("/animals/new", (req, res) => {
+  const newPetProperties = [
+    { name: "Name", placeholder: "What's the name?" },
+    { name: "Age", placeholder: "How old is it?" },
+    { name: "Breed", placeholder: "What's its type?" },
+    { name: "Description", placeholder: "Give us some more information!" },
+  ];
+
+  const petTypes = Object.keys(pets);
+  let petPropertiesInputs = "";
+  let petTypeOptions = "";
+
+  newPetProperties.forEach((prop) => {
+    petPropertiesInputs += `
+    <label for="${prop.name}">${prop.name}:</label>
+    <input id="${prop.name}" type="text" placeholder="${prop.placeholder}" name="${prop.name}" />
+    `;
+  });
+
+  petTypes.forEach((petType) => {
+    petTypeOptions += `<option value="${petType}">${petType.slice(
+      0,
+      petType.length - 1
+    )}</option>`;
+  });
+
+  res.send(`
+  <div>
+  <h2>Propose a pet for adoption</h2>
+  <form  method="POST" action="/animals/new">
+  <label for="petType">Choose a pet type:</label>
+    <select name="petType" id="petType">
+    ${petTypeOptions}
+    </select>
+    ${petPropertiesInputs}
+    <input type="submit" />
+  </form>
+  </div>
+  `);
+});
+
+app.post("/animals/new", (req, res) => {
+  const { petType, ...animalProps } = req.body;
+
+  const newPet = {
+    url: `https://robohash.org/${animalProps.Name}.png?size=100x100&set=set1`,
+  };
+
+  Object.entries(animalProps).forEach(([key, value]) => {
+    newPet[key.toLowerCase()] = value;
+  });
+
+  pets[petType].push(newPet);
+
+  res.redirect(`/animals/${petType}`);
 });
 
 app.get("/animals/:pet_type/:pet_id", (req, res) => {
   const { pet_type, pet_id } = req.params;
   const pet = pets[pet_type][pet_id];
+  const singularPetType = pet_type.slice(0, pet_type.length - 1);
   if (!pet) {
     res.status(404).send(`No such pet here!`);
   } else {
     res.send(`
-     <h1>The chosen ${pet_type} responds to ${pet.name}</h1>
+     <h1>The ${singularPetType} you selected responds to: ${pet.name}</h1>
      <ul>
         <li>age: ${pet.age}</li>
         <li>breed: ${pet.breed}</li>
